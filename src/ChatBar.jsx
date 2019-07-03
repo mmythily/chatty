@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 
 class ChatBar extends Component {
     render() {
-        const currentUser = this.props.currentUser;
+        const {currentUser} = this.props;
         return (
-            <footer className="chatbar">
+            <footer className='chatbar'>
                 <form>
-                    <input className="chatbar-username" placeholder={currentUser} value={currentUser} />
-                    <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+                    <input className='chatbar-username' placeholder={currentUser} />
+                    <input className='chatbar-message' placeholder='Type a message and hit ENTER' />
                 </form>
             </footer>
         );

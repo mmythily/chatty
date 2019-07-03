@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import MessageList from './MessageList';
-import ChatBar from './ChatBar';
+import MessageList from './MessageList.jsx';
+import ChatBar from './ChatBar.jsx';
 
 //1) Set the initial state
 // Set your App component's initial state. 
@@ -11,9 +11,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name:'Anonymous'},
-      messages: []
-    };
+        currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
+        messages: [
+          {
+            username: 'Bob',
+            content: 'Has anyone seen my marbles?',
+          },
+          {
+            username: 'Anonymous',
+            content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
+          }
+        ]
+      }
   }
 
   componentDidMount() {
