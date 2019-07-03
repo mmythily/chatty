@@ -5,10 +5,10 @@ class ChatBar extends Component {
         const {currentUser} = this.props;
         return (
             <footer className='chatbar'>
-                <form>
+
                     <input className='chatbar-username' placeholder={currentUser} />
                     <input className='chatbar-message' placeholder='Type a message and hit ENTER' />
-                </form>
+
             </footer>
         );
     }
