@@ -1,0 +1,24 @@
+import React, {Component} from 'react';
+
+class MessageList extends Component {
+    render() {
+      return (
+        <main className="messages">
+            <div className="message">
+                <span className="message-username">Anonymous1</span>
+                <span className="message-content">I won't be impressed with technology until I can download food.</span>
+            </div>
+            <div className="message system">
+                Anonymous1 changed their name to nomnom.
+            </div>
+        </main>
+      );
+    }
+  }
+  
+  export default MessageList;
+
+  
+//   3) Pass messages as props
+// Task: Pass the messages as a prop to MessageList. 
+//Use a loop inside the MessageList component to render one Message component for each message.

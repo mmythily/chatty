@@ -5,7 +5,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1>Hello React :)</h1>
+        <nav className="navbar">
+          <a href="/" className="navbar-brand">Chatty</a>
+        </nav>
       </div>
     );
   }
