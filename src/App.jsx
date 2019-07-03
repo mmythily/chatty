@@ -42,12 +42,13 @@ class App extends Component {
 
   //method that takes the content from bar
   addMessage = (content) => {
+    console.log(this.state.messages)
     const newMessage = {content, username:this.state.currentUser.name}
     const messages = this.state.messages.concat(newMessage)
     this.setState({messages: messages})
   }
 
-  // //method that takes the content from bar
+  //method that takes the content from bar
   // changeUser = (content) => {
   //   const newMessage = {content, username:this.state.currentUser.name}
   //   const messages = this.state.messages.concat(newMessage)

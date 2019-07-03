@@ -14,7 +14,9 @@ class ChatBar extends Component {
         );
     }
 
+    //On 'enter' the message adds the 
     messageChange = (event) => {
+        console.log(this)
         if (event.key === 'Enter') {
             event.preventDefault();
             const content = event.target.value;
