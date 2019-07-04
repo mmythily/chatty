@@ -8,21 +8,23 @@ class ChatBar extends Component {
             <form className='chatbar' onSubmit={this.onFormSubmit}>
 
                     <input className='chatbar-username' placeholder={currentUser} />
-                    <input className='chatbar-message' placeholder='Type a message and hit ENTER' type='text' onKeyPress={this.messageChange}/>
+                    <input className='chatbar-message' placeholder='Type a message and hit ENTER' type='text' onKeyPress={this.messageDisplay}/>
 
             </form>
         );
     }
 
     //On 'enter' the message adds the 
-    messageChange = (event) => {
-        console.log(this)
+    messageDisplay = event => {
+        //console.log(this)
         if (event.key === 'Enter') {
             event.preventDefault();
             const content = event.target.value;
             this.props.addMessage(content);
             event.target.value='';
         }
+        console.log('messageDisplay', this.state)
+
     }
 
     // userChange = (event) => {

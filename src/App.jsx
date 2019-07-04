@@ -34,38 +34,38 @@ class App extends Component {
     );
   }
 
-  //method that displays current user message
+  //display current user message on MessageList from input form
   addMessage = (content) => {
-    console.log(this.state.messages)
-    const newMessage = {content, username:this.state.currentUser.name}
+    const newMessage = {username:this.state.currentUser.name,content }
     const messages = this.state.messages.concat(newMessage)
-    this.setState({messages: messages})
+    console.log(newMessage)
+    this.socket.send(JSON.stringify(newMessage));
+    //this.setState({messages: messages})
+    console.log('add messages', this.state)
   }
 
-  //method which displays received messages from other users
+  //displays received messages from other users
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
 
-    this.socket.onmessage = event => {
-      const sendMessage = JSON.parse(event.data);
-      setTimeout(() => {
-        const newMessage = {
-          username:sendMessage.username,
-          content:sendMessage.content,
-          //id:sendMessage.id
-        };
-        
-        this.setState({
-          messages:this.state.messages.concat([newMessage])
-        })
-        console.log('component did mount',this);
-      }, 1000);
+    this.socket.onopen = (event) => {
+      console.log('Connected to Web Socket')
+      console.log('socket on open', this.state)
+    }
+    this.socket.onmessage = (event) => {
+      console.log(event)
+      
+      console.log('Message received')
 
+      //this.socket.send(JSON.parse(this.state.messages));
+    }
+    
     // setTimeout(() => {
     //   const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
     //   const messages = this.state.messages.concat(newMessage)
     //   this.setState({messages: messages})
     // }, 1000);
+
   }
 
   //method that takes the content from bar
@@ -74,6 +74,7 @@ class App extends Component {
   //   const messages = this.state.messages.concat(newMessage)
   //   this.setState({messages: messages})
   // }
-}
+  }
+
 
 export default App;
