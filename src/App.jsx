@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
+
 class App extends Component {
+
   constructor(props) {
     super(props);
 
@@ -22,14 +24,6 @@ class App extends Component {
       ]
     }
   }
-  componentDidMount() {
-    console.log(this);
-    setTimeout(() => {
-      const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages: messages})
-    }, 2000);
-  }
   
   render() {
     return (
@@ -40,12 +34,38 @@ class App extends Component {
     );
   }
 
-  //method that takes the content from bar
+  //method that displays current user message
   addMessage = (content) => {
     console.log(this.state.messages)
     const newMessage = {content, username:this.state.currentUser.name}
     const messages = this.state.messages.concat(newMessage)
     this.setState({messages: messages})
+  }
+
+  //method which displays received messages from other users
+  componentDidMount() {
+    this.socket = new WebSocket('ws://localhost:3001');
+
+    this.socket.onmessage = event => {
+      const sendMessage = JSON.parse(event.data);
+      setTimeout(() => {
+        const newMessage = {
+          username:sendMessage.username,
+          content:sendMessage.content,
+          //id:sendMessage.id
+        };
+        
+        this.setState({
+          messages:this.state.messages.concat([newMessage])
+        })
+        console.log('component did mount',this);
+      }, 1000);
+
+    // setTimeout(() => {
+    //   const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
+    //   const messages = this.state.messages.concat(newMessage)
+    //   this.setState({messages: messages})
+    // }, 1000);
   }
 
   //method that takes the content from bar
