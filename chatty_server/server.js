@@ -20,7 +20,7 @@ wss.on('connection', ws => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(msgObj));
             }
-            console.log(client)
+            //console.log(client)
         });
         console.log(msgObj)
     })
