@@ -9,28 +9,27 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: 'Anonymous'}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
       
     }
   }
   
-  render() {
-    return (
-      <div>
-        <MessageList messages={this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage}/>
-      </div>
-    );
-  }
 
   //display current user message on MessageList from input form
   addMessage = (content) => {
-    const newMessage = {username:this.state.currentUser.name,content }
-    //const messages = this.state.messages.concat(newMessage)
+    const newMessage = {username: this.state.currentUser.name, content }
     this.socket.send(JSON.stringify(newMessage));
-    //this.setState({messages:messages})
-    //console.log('add messages', this.state)
+  }
+
+  changeUser = (currentUser, cb) => {
+    const oldUser = this.state.currentUser;
+    const newUser = {
+      content: `${oldUser} changed their name to ${currentUser}`
+    }
+    this.setState({
+      currentUser:{name:currentUser}
+    }, cb);
   }
 
   componentDidMount() {
@@ -44,8 +43,6 @@ class App extends Component {
     }
     //receive the broadcasted messages
     this.socket.onmessage = (event) => {
-      console.log('event onmessage',event)
-      //console.log('event onmessage',event.data)
       const receivedData = JSON.parse(event.data);
       console.log(receivedData)
       const postMessage = {
@@ -55,33 +52,18 @@ class App extends Component {
       }
       const messages = this.state.messages.concat(postMessage)
       this.setState({messages:messages})
-
-      //console.log('display incoming messages', this.state)
-
-      console.log('Message received',postMessage)
-      //this.socket.send(postMessage);
-
-      //this.socket.close()
     }
-
-
-    // setTimeout(() => {
-    //   const newMessage = {id: 3, username: 'Michelle', content: 'Hello there!'};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   this.setState({messages: messages})
-    // }, 1000);
-
   }
 
-  
-
-  //method that takes the content from bar
-  // changeUser = (content) => {
-  //   const newMessage = {content, username:this.state.currentUser.name}
-  //   const messages = this.state.messages.concat(newMessage)
-  //   this.setState({messages: messages})
-  // }
+  render() {
+    return (
+      <div>
+        <MessageList messages={this.state.messages}/>
+        <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage} changeUser={this.changeUser} />
+      </div>
+    );
   }
+}
 
 
 export default App;
