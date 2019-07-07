@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Navigation from './Navigation.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
@@ -104,6 +105,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Navigation/>
         <MessageList messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage} changeUser={this.changeUser} />
       </div>
