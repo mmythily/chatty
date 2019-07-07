@@ -13,6 +13,17 @@ const server = express()
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', ws => {
+    console.log('Client connected');
+
+    let users = {
+        type: 'userCount',
+        users: wss.clients.size
+    }
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify(users));
+    });
+    console.log('wss.clients.size', wss.clients.size);
+
     ws.on('message', data =>{
         const msgObj= JSON.parse(data)
         msgObj.id = uuidv4()
@@ -20,12 +31,11 @@ wss.on('connection', ws => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(msgObj));
             }
-            //console.log(client)
         });
-        console.log(msgObj)
+        
     })
 
-    console.log('Client connected');
+    
     
     ws.on('close', () => console.log('Client disconnected'));
 });

@@ -10,7 +10,8 @@ class App extends Component {
 
     this.state = {
       currentUser: {name: 'Anonymous'},
-      messages:[]
+      messages:[],
+      userCount: 1
     }
   }
   
@@ -28,12 +29,6 @@ class App extends Component {
   changeUser = (currentUser, cb) => {
     const oldUser = this.state.currentUser.name;
     const newUser = currentUser;
-    // {
-    //   content: `${oldUser} changed their name to ${currentUser}`
-    // }
-    // console.log("change user = old name", oldUser)
-    // console.log("change user = new name", newUser)
-    // console.log("change user = this", this)
     
     const newNotification = {
       type:"postNotification",
@@ -45,6 +40,8 @@ class App extends Component {
       currentUser:{name:currentUser}
     }, cb);
   }
+
+  
 
   componentDidMount() {
     console.log("componentDidMount <App/>")
@@ -59,7 +56,7 @@ class App extends Component {
     //receive the broadcasted messages
     this.socket.onmessage = (event) => {
       const receivedData = JSON.parse(event.data);
-      // console.log('before swtich',receivedData.type);
+      console.log('before swtich',receivedData);
       switch(receivedData.type){
         case "postMessage":
           const postMessage = {
@@ -84,6 +81,10 @@ class App extends Component {
             this.setState({messages:this.state.messages.concat(postNotification)});
           }
           break;
+        case "userCount":
+          console.log('postCOunt',receivedData)
+          const userCount = receivedData.userCount;
+          console.log("userCount", userCount )
           default:
             throw new Error(`Unknown event type: ${receivedData.type}`)
       }
