@@ -26,10 +26,21 @@ class App extends Component {
   }
 
   changeUser = (currentUser, cb) => {
-    const oldUser = this.state.currentUser;
-    const newUser = {
-      content: `${oldUser} changed their name to ${currentUser}`
+    const oldUser = this.state.currentUser.name;
+    const newUser = currentUser;
+    // {
+    //   content: `${oldUser} changed their name to ${currentUser}`
+    // }
+    // console.log("change user = old name", oldUser)
+    // console.log("change user = new name", newUser)
+    // console.log("change user = this", this)
+    
+    const newNotification = {
+      type:"postNotification",
+      oldUser,
+      username: newUser
     }
+    this.socket.send(JSON.stringify(newNotification));
     this.setState({
       currentUser:{name:currentUser}
     }, cb);
@@ -48,38 +59,44 @@ class App extends Component {
     //receive the broadcasted messages
     this.socket.onmessage = (event) => {
       const receivedData = JSON.parse(event.data);
-      console.log(receivedData);
+      // console.log('before swtich',receivedData.type);
       switch(receivedData.type){
-        case "incomingMessage":
+        case "postMessage":
           const postMessage = {
+            // oldUser: receivedData.currentUser,
             username: receivedData.username,
             content: receivedData.content,
             id: receivedData.id
           }
-          const messages = this.state.messages.concat(postMessage)
-          console.log('from switch:', mes)
-          this.setState({messages:messages});
+          // const messages = this.state.messages.concat(postMessage)
+          console.log('from App incoming:', receivedData)
+          this.setState({messages:this.state.messages.concat(postMessage)});
           break;
 
-        case "incomingNotification":
-          const postNotification = {
-            username:receivedData.currentUser,
-            newUsername:receivedData.username,
+        case "postNotification":
+          const oldUser = receivedData.oldUser;
+          const newUser = receivedData.username;
+          if (oldUser !== newUser) {
+            const postNotification = {
+              newUsername:newUser,
+              content: `${oldUser} changed their name to ${receivedData.username}`
+            }
+            this.setState({messages:this.state.messages.concat(postNotification)});
           }
-          
-
-
+          break;
+          default:
+            throw new Error(`Unknown event type: ${receivedData.type}`)
       }
 
 
-      console.log(receivedData)
-      const postMessage = {
-        username: receivedData.username,
-        content: receivedData.content,
-        id: receivedData.id
-      }
-      const messages = this.state.messages.concat(postMessage)
-      this.setState({messages:messages})
+      // console.log(receivedData)
+      // const postMessage = {
+      //   username: receivedData.username,
+      //   content: receivedData.content,
+      //   id: receivedData.id
+      // }
+      // const messages = this.state.messages.concat(postMessage)
+      // this.setState({messages:messages})
     }
   }
 
