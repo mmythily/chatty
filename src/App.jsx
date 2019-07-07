@@ -83,29 +83,21 @@ class App extends Component {
           }
           break;
         case "userCount":
-          console.log('postCOunt',receivedData)
-          const userCount = receivedData.userCount;
-          console.log("userCount", userCount )
-          default:
-            throw new Error(`Unknown event type: ${receivedData.type}`)
+          const userCount = receivedData.users;
+          console.log("userCount", userCount)
+          this.setState({userCount:this.state.userCount});
+          console.log('this from suercount',this);
+        default:
+          throw new Error(`Unknown event type: ${receivedData.type}`)
       }
-
-
-      // console.log(receivedData)
-      // const postMessage = {
-      //   username: receivedData.username,
-      //   content: receivedData.content,
-      //   id: receivedData.id
-      // }
-      // const messages = this.state.messages.concat(postMessage)
-      // this.setState({messages:messages})
     }
   }
 
   render() {
+    const { userCount } = this.state;
     return (
       <div>
-        <Navigation/>
+        <Navigation userCount={this.state.userCount}/>
         <MessageList messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage} changeUser={this.changeUser} />
       </div>
