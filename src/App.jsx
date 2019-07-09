@@ -91,6 +91,13 @@ class App extends Component {
     }
   }
 
+  componentDidUnmount() {
+    const userCount = receivedData.users;
+    this.setState({userCount:userCount});
+    this.socket.send(JSON.stringify(users));
+  }
+
+
   render() {
     return (
       <div>
