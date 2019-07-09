@@ -12,7 +12,7 @@ class App extends Component {
     this.state = {
       currentUser: {name: 'Anonymous'},
       messages:[],
-      userCount: 1
+      userCount: ""
     }
   }
   
@@ -85,7 +85,7 @@ class App extends Component {
         case "userCount":
           const userCount = receivedData.users;
           console.log("userCount", userCount)
-          this.setState({userCount:this.state.userCount});
+          this.setState({userCount:userCount});
           console.log('this from suercount',this);
         default:
           throw new Error(`Unknown event type: ${receivedData.type}`)
