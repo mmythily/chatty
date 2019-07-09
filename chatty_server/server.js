@@ -22,7 +22,6 @@ wss.on('connection', ws => {
     wss.clients.forEach(client => {
         client.send(JSON.stringify(users));
     });
-    console.log('wss.clients.size', wss.clients.size);
 
     ws.on('message', data =>{
         const msgObj= JSON.parse(data)
@@ -35,8 +34,12 @@ wss.on('connection', ws => {
         
     })
 
-    
-    
-    ws.on('close', () => console.log('Client disconnected'));
+
+    ws.on('close', () => {
+        console.log('Client disconnected')
+        wss.clients.forEach(client => {
+            client.send(JSON.stringify(users));
+        });
+    });
 });
 
