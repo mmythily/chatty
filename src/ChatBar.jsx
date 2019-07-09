@@ -7,7 +7,7 @@ class ChatBar extends Component {
         this.state = {user: this.props.currentUser}
     }
 
-    //On 'enter' the message adds the 
+    //On 'enter' the message renders with user and message
     messageDisplay = event => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -17,7 +17,6 @@ class ChatBar extends Component {
             })
             event.target.value= '';
         }
-        //console.log('messageDisplay', this)
     }
 
     updateUser = (event) => {
@@ -25,7 +24,6 @@ class ChatBar extends Component {
     }
 
     render() {
-        const {currentUser} = this.props;
         return (
             <form className='chatbar'>
                 <input 

@@ -16,7 +16,6 @@ class App extends Component {
     }
   }
   
-
   //display current user message on MessageList from input form
   addMessage = (content) => {
     const newMessage = {
@@ -27,6 +26,7 @@ class App extends Component {
     this.socket.send(JSON.stringify(newMessage));
   }
 
+  //shows change of user
   changeUser = (currentUser, cb) => {
     const oldUser = this.state.currentUser.name;
     const newUser = currentUser;
@@ -36,16 +36,16 @@ class App extends Component {
       oldUser,
       username: newUser
     }
+
     this.socket.send(JSON.stringify(newNotification));
     this.setState({
       currentUser:{name:currentUser}
-    }, cb);
+      }, cb);
   }
 
   
 
   componentDidMount() {
-    console.log("componentDidMount <App/>")
 
     //establish connection with websocket
     this.socket = new WebSocket('ws://localhost:3001');
@@ -57,17 +57,15 @@ class App extends Component {
     //receive the broadcasted messages
     this.socket.onmessage = (event) => {
       const receivedData = JSON.parse(event.data);
-      console.log('before swtich',receivedData);
+
       switch(receivedData.type){
         case "postMessage":
           const postMessage = {
-            // oldUser: receivedData.currentUser,
             username: receivedData.username,
             content: receivedData.content,
             id: receivedData.id
           }
-          // const messages = this.state.messages.concat(postMessage)
-          console.log('from App incoming:', receivedData)
+
           this.setState({messages:this.state.messages.concat(postMessage)});
           break;
 
@@ -77,24 +75,23 @@ class App extends Component {
           if (oldUser !== newUser) {
             const postNotification = {
               newUsername:newUser,
-              content: `${oldUser} changed their name to ${receivedData.username}`
+              content: `${oldUser} changed their name to ${newUser}`
             }
             this.setState({messages:this.state.messages.concat(postNotification)});
           }
           break;
+
         case "userCount":
           const userCount = receivedData.users;
-          console.log("userCount", userCount)
           this.setState({userCount:userCount});
-          console.log('this from suercount',this);
+          break;
         default:
-          throw new Error(`Unknown event type: ${receivedData.type}`)
+          throw new Error(`Unknown event type: ${receivedData.type}`);
       }
     }
   }
 
   render() {
-    const { userCount } = this.state;
     return (
       <div>
         <Navigation userCount={this.state.userCount}/>
